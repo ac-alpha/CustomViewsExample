@@ -15,8 +15,10 @@ import android.view.View;
 
 public class CustomView extends View {
 
-    private static final int SQUARE_SIZE = 100;
+    private static final int SQUARE_SIZE = 200;
+    //The rect object specifies the dimensions of rectangle
     private Rect mRect;
+    //Painn object specifies background of the rectangle
     private Paint mPaint;
 
     public CustomView(Context context) {
@@ -42,6 +44,12 @@ public class CustomView extends View {
     private void init(@Nullable AttributeSet attrs){
         mRect = new Rect();
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaint.setColor(Color.BLUE);
+    }
+
+    public void swapColor(){
+        mPaint.setColor(mPaint.getColor()==Color.GREEN ? Color.BLUE : Color.GREEN);
+        postInvalidate();
     }
 
     @Override
@@ -51,13 +59,10 @@ public class CustomView extends View {
 
         //Code for making a rectangle in canvas
 
-        mRect.top = SQUARE_SIZE;
-        mRect.left = SQUARE_SIZE;
+        mRect.top = 50;
+        mRect.left = 50;
         mRect.bottom=mRect.top+SQUARE_SIZE;
         mRect.right=mRect.left+SQUARE_SIZE;
-
-
-        mPaint.setColor(Color.BLUE);
 
         canvas.drawRect(mRect,mPaint);
 

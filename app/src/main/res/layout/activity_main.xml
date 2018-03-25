@@ -4,10 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.ashutoshchaubey.customviewscoderzgeekexample.MainActivity">
 
     <com.ashutoshchaubey.customviewscoderzgeekexample.views.CustomView
+        android:id="@+id/custom_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="150dp" />
+
+    <Button
+        android:id="@+id/btn_swap_color"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Swap Color"/>
 
 </LinearLayout>
