@@ -10,6 +10,8 @@
     <com.ashutoshchaubey.customviewscoderzgeekexample.views.CustomView
         android:id="@+id/custom_view"
         android:layout_width="match_parent"
+        app:square_color="@android:color/holo_red_dark"
+        app:square_dimension="120dp"
         android:layout_height="150dp" />
 
     <Button
