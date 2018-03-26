@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.ashutoshchaubey.customviewscoderzgeekexample.R;
@@ -22,9 +23,13 @@ public class CustomView extends View {
     //The rect object specifies the dimensions of rectangle
     private Rect mRect;
     //Paint object specifies background of the rectangle
-    private Paint mPaint;
+    private Paint mPaintSquare;
+    private Paint mPaintCircle;
     private int mSquareColor;
     private int mSquareSize;
+
+    private float mCircleX,mCircleY;
+    private float mCircleRadius=100f;
 
     public CustomView(Context context) {
         super(context);
@@ -48,8 +53,11 @@ public class CustomView extends View {
 
     private void init(@Nullable AttributeSet attrs){
         mRect = new Rect();
-        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintSquare = new Paint(Paint.ANTI_ALIAS_FLAG);
 
+        mPaintCircle=new Paint();
+        mPaintCircle.setAntiAlias(true);
+        mPaintCircle.setColor(Color.parseColor("#00ccff"));
 
         if(attrs==null){
             return;
@@ -59,13 +67,13 @@ public class CustomView extends View {
 
         mSquareColor = ta.getColor(R.styleable.CustomView_square_color,Color.BLUE);
         mSquareSize = ta.getDimensionPixelSize(R.styleable.CustomView_square_dimension , SQUARE_SIZE_DEF);
-        mPaint.setColor(mSquareColor);
+        mPaintSquare.setColor(mSquareColor);
         ta.recycle();
 
     }
 
     public void swapColor(){
-        mPaint.setColor(mPaint.getColor()==Color.GREEN ? mSquareColor : Color.GREEN);
+        mPaintSquare.setColor(mPaintSquare.getColor()==Color.GREEN ? mSquareColor : Color.GREEN);
         postInvalidate();
     }
 
@@ -80,8 +88,54 @@ public class CustomView extends View {
         mRect.left = 50;
         mRect.bottom=mRect.top+mSquareSize;
         mRect.right=mRect.left+mSquareSize;
+        canvas.drawRect(mRect,mPaintSquare);
 
-        canvas.drawRect(mRect,mPaint);
+        //Code for making a circle in canvas
+        if(mCircleX==0f || mCircleY==0f){
 
+            mCircleX=canvas.getWidth()/2;
+            mCircleY=canvas.getHeight()/2;
+
+        }
+        canvas.drawCircle(mCircleX,mCircleY,mCircleRadius,mPaintCircle);
+
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        boolean value = super.onTouchEvent(event);
+
+        switch (event.getAction()){
+
+            case MotionEvent.ACTION_DOWN:
+                float x1 = event.getX();
+                float y2 =event.getY();
+
+                if(mRect.left<x1 && mRect.right>x1 && mRect.top<y2 && mRect.bottom>y2){
+
+                    mCircleRadius+=10f;
+                    postInvalidate();
+
+                }
+
+                return true;
+            case MotionEvent.ACTION_MOVE:
+                float x = event.getX();
+                float y=event.getY();
+                double dx = Math.pow(x-mCircleX,2);
+                double dy = Math.pow(y-mCircleY,2);
+                if(dx+dy < Math.pow(mCircleRadius,2)){
+                    //Circle is touched
+                    mCircleY=y;
+                    mCircleX=x;
+
+                    postInvalidate();
+                    return true;
+                }
+
+
+        }
+
+        return value;
     }
 }
